@@ -1,15 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
-
 namespace Demo.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        };
 
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly IConfiguration _config;
@@ -35,10 +34,11 @@ namespace Demo.API.Controllers
             .ToArray();
         }
 
-        //[HttpGet]
-        //public string GetConn()
-        //{
-        //    return _config.GetConnectionString("MyConn");
-        //}
+        [HttpGet]
+        public string GetConn()
+        {
+            return _config.GetConnectionString("MyConn");
+        }
+
     }
 }
