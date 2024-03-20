@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Demo.API.Controllers
 {
@@ -8,7 +7,7 @@ namespace Demo.API.Controllers
 
     public class MyCRUDController : ControllerBase
     {
-        public static List<Info> _MyFriendList = new List<Info>
+        public static List<Info> MyFriendList = new List<Info>
         {
             new Info(){ Id = 1001, Mobile = "111", Name = "JoJo"},
         };
@@ -23,12 +22,12 @@ namespace Demo.API.Controllers
 
             try
             {
-                _MyFriendList.Add(new Info()
+                MyFriendList.Add(new Info()
                 {
                     Id = rndNo,
                     Name = name,
                     Mobile = mobile,
-                    CrateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")
+                    CreateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")
                 });
                 res = "create done";
             }
@@ -49,12 +48,12 @@ namespace Demo.API.Controllers
 
             try
             {
-                _MyFriendList.Add(new Info()
+                MyFriendList.Add(new Info()
                 {
                     Id = rndNo,
                     Name = name,
                     Mobile = mobile,
-                    CrateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")
+                    CreateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")
                 });
                 res = "create done";
             }
@@ -76,12 +75,12 @@ namespace Demo.API.Controllers
 
             try
             {
-                _MyFriendList.Add(new Info()
+                MyFriendList.Add(new Info()
                 {
                     Id = rndNo,
                     Name = data.Name,
                     Mobile = data.Mobile,
-                    CrateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")
+                    CreateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")
                 });
                 res = "create done";
             }
@@ -95,7 +94,7 @@ namespace Demo.API.Controllers
 
         public List<Info> Read()
         {
-            return _MyFriendList;
+            return MyFriendList;
         }
 
 
@@ -106,7 +105,7 @@ namespace Demo.API.Controllers
         [HttpGet("{id}")]
         public List<Info> Read_FromRoute(int id)
         {
-            return _MyFriendList;
+            return MyFriendList;
         }
 
         /*
@@ -116,7 +115,7 @@ namespace Demo.API.Controllers
         [HttpGet]
         public List<Info> Read_FromQuery([FromQuery] int? id, string? name)
         {
-            var list = _MyFriendList.AsEnumerable();
+            var list = MyFriendList.AsEnumerable();
 
             if (id.HasValue)
             {
@@ -140,7 +139,7 @@ namespace Demo.API.Controllers
             var res = string.Empty;
             try
             {
-                var friend = _MyFriendList.Where(c => c.Id == id).FirstOrDefault();
+                var friend = MyFriendList.Where(c => c.Id == id).FirstOrDefault();
                 if (friend != null)
                 {
                     friend.Mobile = mobile;
@@ -167,10 +166,10 @@ namespace Demo.API.Controllers
             var res = string.Empty;
             try
             {
-                var friend = _MyFriendList.Where(c => c.Id == id).FirstOrDefault();
+                var friend = MyFriendList.Where(c => c.Id == id).FirstOrDefault();
                 if (friend != null)
                 {
-                    _MyFriendList.Remove(friend);
+                    MyFriendList.Remove(friend);
                 }
                 else
                 {
@@ -193,10 +192,10 @@ namespace Demo.API.Controllers
             var res = string.Empty;
             try
             {
-                var friend = _MyFriendList.Where(c => c.Id == id).FirstOrDefault();
+                var friend = MyFriendList.Where(c => c.Id == id).FirstOrDefault();
                 if (friend != null)
                 {
-                    _MyFriendList.Remove(friend);
+                    MyFriendList.Remove(friend);
                 }
                 else
                 {
@@ -224,7 +223,7 @@ namespace Demo.API.Controllers
             public int Id { get; set; }
             public string Name { get; set; }
             public string Mobile { get; set; }
-            public string CrateTime { get; set; }
+            public string CreateTime { get; set; }
             public string ModifyTime { get; set; }
         }
     }
