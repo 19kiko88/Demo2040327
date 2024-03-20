@@ -14,10 +14,8 @@ namespace Demo.API.Controllers
         };
 
 
-        //[HttpGet]
-        [HttpPost]
-        [Route("{name}/{mobile}")]
-        public string Create(string name, string mobile)
+        [HttpPost("{name}/{mobile}")]
+        public string Create_FromRoute(string name, string mobile)
         {
             var rnd = new Random();
             var rndNo = rnd.Next(1, 1000);
@@ -30,6 +28,59 @@ namespace Demo.API.Controllers
                     Id = rndNo,
                     Name = name,
                     Mobile = mobile,
+                    CrateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")
+                });
+                res = "create done";
+            }
+            catch (Exception ex)
+            {
+                res = $"create failed. {ex.Message}";
+            }
+
+            return res;
+        }
+
+        [HttpPost]
+        public string Create_FromQuery([FromQuery]string? name, string? mobile)
+        {
+            var rnd = new Random();
+            var rndNo = rnd.Next(1, 1000);
+            var res = string.Empty;
+
+            try
+            {
+                _MyFriendList.Add(new Info()
+                {
+                    Id = rndNo,
+                    Name = name,
+                    Mobile = mobile,
+                    CrateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")
+                });
+                res = "create done";
+            }
+            catch (Exception ex)
+            {
+                res = $"create failed. {ex.Message}";
+            }
+
+            return res;
+        }
+
+
+        [HttpPost]
+        public string Create_FromBody([FromBody] RequestDto data)
+        {
+            var rnd = new Random();
+            var rndNo = rnd.Next(1, 1000);
+            var res = string.Empty;
+
+            try
+            {
+                _MyFriendList.Add(new Info()
+                {
+                    Id = rndNo,
+                    Name = data.Name,
+                    Mobile = data.Mobile,
                     CrateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")
                 });
                 res = "create done";
@@ -80,7 +131,6 @@ namespace Demo.API.Controllers
             return list.ToList();            
 
         }
-
 
 
         [HttpPost]
@@ -165,7 +215,8 @@ namespace Demo.API.Controllers
 
         public class RequestDto
         {
-            public int? Id { get; set; }
+            public string? Name { get; set; }
+            public string? Mobile { get; set; }
         }
 
         public class Info
