@@ -49,31 +49,36 @@ namespace Demo.API.Controllers
 
 
         /*
-         *FromRoute
+         * FromRoute
+         * https://localhost:44359/MyCRUD/Read_FromRoute/JoJo
          */
         [HttpGet("{id}")]
-        public List<Info> ReadById(int id)
+        public List<Info> Read_FromRoute(int id)
         {
             return _MyFriendList;
         }
 
         /*
-         * FromQuery
-         * https://localhost:44359/MyCRUD/Read_Max1/data
-         * https://localhost:44359/MyCRUD/Read_Max1/data?id=1001
+         * FromQueryString
+         * https://localhost:44359/MyCRUD/Read_FromQuery?id=1001&name=
          */
-        [HttpGet("data")]
-        public List<Info> ReadById2([FromQuery] RequestDto data)
+        [HttpGet]
+        public List<Info> Read_FromQuery([FromQuery] int? id, string? name)
         {
-            if (data.Id.HasValue)
+            var list = _MyFriendList.AsEnumerable();
+
+            if (id.HasValue)
             {
-                return _MyFriendList.Where(c => c.Id == data.Id).ToList();
+                list = list.Where(c => c.Id == id);
             }
-            else
+
+            if (!string.IsNullOrEmpty(name))
             {
-                return _MyFriendList;
+                list = list.Where(c => c.Name == name);
             }
-            
+
+            return list.ToList();            
+
         }
 
 

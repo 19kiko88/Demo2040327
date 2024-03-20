@@ -417,6 +417,7 @@ FodyWeavers.xsd
 /ignore
 Upload
 ExpFile
-/DesignAuditRise.Web/wwwroot
+bin
+obj
 bin
 obj
