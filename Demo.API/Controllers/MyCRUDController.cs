@@ -29,7 +29,7 @@ namespace Demo.API.Controllers
                     Mobile = mobile,
                     CreateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")
                 });
-                res = "create done";
+                res = $"create done(id:{rndNo})";
             }
             catch (Exception ex)
             {
@@ -40,7 +40,7 @@ namespace Demo.API.Controllers
         }
 
         [HttpPost]
-        public string Create_FromQuery([FromQuery]string? name, string? mobile)
+        public string Create_FromQuery([FromQuery] string? name, string? mobile)
         {
             var rnd = new Random();
             var rndNo = rnd.Next(1, 1000);
@@ -55,7 +55,7 @@ namespace Demo.API.Controllers
                     Mobile = mobile,
                     CreateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")
                 });
-                res = "create done";
+                res = $"create done(id:{rndNo})";
             }
             catch (Exception ex)
             {
@@ -82,7 +82,7 @@ namespace Demo.API.Controllers
                     Mobile = data.Mobile,
                     CreateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")
                 });
-                res = "create done";
+                res = $"create done(id:{rndNo})";
             }
             catch (Exception ex)
             {
@@ -95,6 +95,11 @@ namespace Demo.API.Controllers
         public List<Info> Read()
         {
             return MyFriendList;
+        }
+
+        public ActionResult Read_ReturnOK()
+        {
+            return Ok();
         }
 
 
@@ -127,29 +132,40 @@ namespace Demo.API.Controllers
                 list = list.Where(c => c.Name == name);
             }
 
-            return list.ToList();            
+            return list.ToList();
 
         }
 
 
         [HttpPost]
-        [Route("{id}/{mobile}")]
-        public string Update(int id, string mobile)
+        public string Update([FromBody] RequestDto data)
         {
             var res = string.Empty;
             try
             {
-                var friend = MyFriendList.Where(c => c.Id == id).FirstOrDefault();
+                var friend = MyFriendList.Where(c => c.Id == data.Id).FirstOrDefault();
                 if (friend != null)
                 {
-                    friend.Mobile = mobile;
+                    if (!string.IsNullOrEmpty(data.Mobile))
+                    {
+                        res += $"{friend.Mobile} => {data.Mobile}, ";
+                        friend.Mobile = data.Mobile;
+                    }
+
+                    if (!string.IsNullOrEmpty(data.Name))
+                    {
+                        res += $"{friend.Name} => {data.Name}, ";
+                        friend.Name = data.Name;
+                    }
+                    
                     friend.ModifyTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
                 }
                 else
                 {
                     return "data not found!!";
                 }
-                res = "update done";
+
+                res = $"update done. {res}";
             }
             catch (Exception ex)
             {
@@ -159,9 +175,9 @@ namespace Demo.API.Controllers
             return res;
         }
 
-        [HttpGet]
-        //[Route("{id}")]
-        public string Delete(int id)
+
+        [HttpPost("{id}")]
+        public string Delete_FromRoute(int id)
         {
             var res = string.Empty;
             try
@@ -186,8 +202,32 @@ namespace Demo.API.Controllers
         }
 
         [HttpPost]
-        [Route("{id}")]
-        public string Delete2(int id)
+        public string Delete_FromBody([FromBody]RequestDto data)
+        {
+            var res = string.Empty;
+            try
+            {
+                var friend = MyFriendList.Where(c => c.Id == data.Id).FirstOrDefault();
+                if (friend != null)
+                {
+                    MyFriendList.Remove(friend);
+                }
+                else
+                {
+                    return "data not found!!";
+                }
+                res = "delete done";
+            }
+            catch (Exception ex)
+            {
+                res = "delete failed";
+            }
+
+            return res;
+        }
+
+        [HttpGet]
+        public string DeleteWithGetMehod(int id)
         {
             var res = string.Empty;
             try
@@ -214,13 +254,14 @@ namespace Demo.API.Controllers
 
         public class RequestDto
         {
+            public int? Id { get; set; }
             public string? Name { get; set; }
             public string? Mobile { get; set; }
         }
 
         public class Info
         {
-            public int Id { get; set; }
+            public int? Id { get; set; }
             public string Name { get; set; }
             public string Mobile { get; set; }
             public string CreateTime { get; set; }
