@@ -9,12 +9,12 @@ namespace Demo.API.Controllers
     {
         public static List<Info> MyFriendList = new List<Info>
         {
-            new Info(){ Id = 1001, Mobile = "111", Name = "JoJo"},
+            new Info(){ Id = 999, Mobile = "111", Name = "JoJo"},
         };
 
 
         [HttpPost("{name}/{mobile}")]
-        public string Create_FromRoute(string name, string mobile)
+        public ActionResult<string> Create_FromRoute(string name, string mobile)
         {
             var rnd = new Random();
             var rndNo = rnd.Next(1, 1000);
@@ -22,6 +22,7 @@ namespace Demo.API.Controllers
 
             try
             {
+                var gg = new int[] { 1, 2, 3 }; var gggg = gg[6];
                 MyFriendList.Add(new Info()
                 {
                     Id = rndNo,
@@ -34,9 +35,12 @@ namespace Demo.API.Controllers
             catch (Exception ex)
             {
                 res = $"create failed. {ex.Message}";
+                //return res;
+                return BadRequest(res);
             }
 
-            return res;
+            //return res;
+            return Ok(res);
         }
 
         [HttpPost]
